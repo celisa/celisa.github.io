@@ -1,0 +1,9 @@
+{% extends "basic.html" %}
+
+{% block content %}
+<article class="post animated fadeInDown">
+  <h1><a href="{{ section.permalink }}"> {{ trans(key="about", lang=lang) }} </a></h1>
+  <div class="post-content">{{ section.content | safe }}</div>
+  <iframe src="/pictures/Elisa Chen Resume 2024.pdf" style="width:718px; height:980px;" frameborder="0"></iframe>
+</article>
+{% endblock content %}

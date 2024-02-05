@@ -1,5 +1,5 @@
 # The URL the site will be built for
-base_url = "https://elisachen.me"
+base_url = "https://celisa.github.io/"
 
 theme = "anatole-zola"
 

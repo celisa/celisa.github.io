@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://celisa.github.io/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://celisa.github.io/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://celisa.github.io/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://celisa.github.io/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://celisa.github.io/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://celisa.github.io/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <title>Elisa Chen • Experimentations With Neural Network Acceleration Techniques</title>
+  
+  
+  <link rel="alternate" type="application/rss+xml" title="Elisa Chen" href="https://celisa.github.io/rss.xml">
+  
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://celisa.github.io/images/logo@2x.png style="width:127px;" alt="logo" />
+        <h3><a href="https://celisa.github.io/">Elisa Chen</a></h3>
+        <div class="description">
+          <p>I Analyze Data To Turn Numbers Into Narratives</p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed by </span><a href="https://www.caicai.me">CaiCai</a>
+      <div class="by_zola"><a href="https://www.getzola.org/" target="_blank">Proudly published with Zola!</a></div>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://celisa.github.io/">Projects</a></li>
+        <li><a  href="https://celisa.github.io/about/">Experience</a></li><li><a 
+            href="https://celisa.github.io/archive/">Archive</a></li></div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+        <div class="avatar"><img src="https://celisa.github.io/images/avatar.jpg"></div>
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;celisa.github.io&#x2F;project-2&#x2F;">Experimentations With Neural Network Acceleration Techniques</a></h1>
+  
+  <div class="post-content"><span id="continue-reading"></span><h3 id="project-motivation">Project Motivation</h3>
+<p>Large language models have shown remarkable effectiveness in understanding and classifying textual content to identify potential threats within the past few years. However, these models come with significant computational and storage overhead, and finding compression and fine-tuning techniques to reduce the scale and computational cost has become a key challenge for the company to overcome. The primary problem is compressing large language models without compromising their performance capabilities. In this project, we aim to:</p>
+<ul>
+<li>Reduce the latency of models by ~50% without compromising the accuracy of the models (&lt;3% loss)</li>
+<li>Experiment with various techniques and identify methods that work best for BERT and other small LLMs (&lt;=3B parameters)</li>
+</ul>
+<h3 id="methodology">Methodology</h3>
+<p>Our experimentation scope is focused on a few network acceleration techniques, specifically in quantization, pruning, and distillation methods. These are techniques of our specific interest as they can compress the network without interfering with each other, ideally leading to higher compression rates as we try combinations of the methods.</p>
+<ol>
+<li>
+<p><strong>Quantization</strong><br>
+Quantization is the process of lowering the precision of the model parameters to reduce their memory footprint and increase computation speed. Given its ease of implementation and minimal complexity, quantization is a rather popular technique applied to compressing deep learning models. However, the effect of quantization varies significantly depending on the hardware being used, and therefore care must be taken to ensure the right type of quantization is performed for the right hardware setup. In our experiments, the scope was limited to post-training quantization, which is the process of quantizing an already fine-tuned model.</p>
+</li>
+<li>
+<p><strong>Pruning</strong><br>
+Pruning in the context of neural networks is a crucial technique aimed at reducing the complexity of a model without significantly affecting its performance. This process involves eliminating certain elements of the network, such as weights or neurons, based on specific criteria. There are two primary types of pruning: structured and unstructured. Structured pruning involves removing entire channels or layers from the network, leading to a more compact architecture that can be more efficiently executed on hardware. Unstructured pruning, on the other hand, removes individual weights, resulting in a sparser network. One common method of unstructured pruning is magnitude pruning, where weights with the smallest absolute
+values are pruned away, under the assumption that they contribute the least to the network's output. 
+After pruning, it's essential to perform fine-tuning, which involves retraining the network on its original task. This step helps the network to recover from any performance loss incurred during pruning and to adapt its remaining weights for optimal performance. Fine-tuning ensures that the pruned network maintains its accuracy and efficiency, making pruning a valuable tool in optimizing neural networks for deployment.</p>
+</li>
+<li>
+<p><strong>Knowledge Distillation</strong><br>
+In knowledge distillation, information is transferred from a teacher model (often larger and pre-trained) to a student (distilled) model that approximates the original function learned by the teacher network. This is achieved by training the student model using the class probabilities produced by the teacher model as soft targets. When the soft targets have high entropy, they provide more information about the relationship
+between the classes than hard targets (one-hot encoded), and the smooth probability distributions help prevent overfitting. The empirical research has shown that the student model can often be trained on less data and less complex architecture to perform similarly to the teacher model.
+One of the key challenges in knowledge distillation is finding a suitable student model to train. Ideally, the architecture of the student model is substantially smaller in size than the teacher model while retaining a majority of its performance. For more renowned models like BERT and GPT, student models have been created (e.g. DistilBERT, TinyBERT, DistilGPT-2) using methods like transformer distillation. Several techniques can be used, including transformer distillation, neural architecture search, and pruning-based methods to discover apt student architectures for distillation purposes, but this typically requires a vast amount of computational resources.</p>
+</li>
+</ol>
+<h3 id="experiment-results">Experiment Results</h3>
+<h4 id="design-setup">Design Setup</h4>
+<p>We performed our network acceleration experimentations on two different models: BERT and Bloomz-3b. Distillation was only performed on BERT due to the computational limitations of finding a student model architecture on Bloomz. In addition to individually applying each technique to the models,
+a combination of the techniques was also performed such as applying both pruning and quantization. This brought our total experiment count to 7 for BERT and 3 for Bloomz (as distillation was not performed).</p>
+<p>The below metrics were used to evaluate the effect of these compression techniques.<br>
+i) Training time (seconds) - The time taken to fine-tune the model<br>
+ii) Inference Time (seconds) - The time taken for the model to generate an individual output<br>
+iii) Accuracy (percentage) - The percentage of the validation data correctly classified<br>
+iv) Model Size (Megabytes) - The size of the model when loaded into memory</p>
+<h4 id="results">Results</h4>
+<p>The experiment results on each variation of the network acceleration method are presented in Figure 1. The quantized model yields the highest accuracy (even higher than the baseline) of 28.55% compared to any other method on the BERT model. By reducing the precision of weights, we introduce a form of noise into the model, which could potentially prevent overfitting and thus improve the generalization model
+leading to a higher accuracy. Compared to the original model, the quantized model is ~4.6x smaller. The inference time was significantly improved by using a combination of distillation and pruning to achieve a ~6.2x improvement in the prediction time.</p>
+<p><img src="/pictures/figure_3.png" alt="Figure 1 Experiement Results for BERT and Bloomz" /></p>
+<p>From the table, we can clearly see that Quantization has the highest model compression rate compared to
+other techniques, with a minimal decrease in the accuracy for BERT. We are still working through the
+experimentations with the LLM model, but so far it would appear that we are not yielding similar gains in
+accuracy with quantization for LLMs. Other combinations of compression techniques did not show
+significant gains in inference time or model size reduction.</p>
+<h3 id="links">Links</h3>
+<p><a href="https://github.com/celisa/LLM-Experimentation-Capstone">Github link</a> - still a WIP</p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2023-08-15</span>
+        
+        
+        <i class="fas fa-tags"></i>
+        
+        <a class="tag" href="https://celisa.github.io/tags/neural network">&nbsp;neural network</a>
+        
+        <a class="tag" href="https://celisa.github.io/tags/experimentation">&nbsp;experimentation</a>
+        
+        <a class="tag" href="https://celisa.github.io/tags/pruning">&nbsp;pruning</a>
+        
+        <a class="tag" href="https://celisa.github.io/tags/quantization">&nbsp;quantization</a>
+        
+        <a class="tag" href="https://celisa.github.io/tags/distillation">&nbsp;distillation</a>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+<div class="share">
+  <div class="weibo">
+    <a class="fab fa-weibo"
+      href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a>
+  </div>
+  <div class="twitter">
+    <a class="fab fa-twitter"
+      href="http://twitter.com/share?text=Experimentations With Neural Network Acceleration Techniques&url=https:&#x2F;&#x2F;celisa.github.io&#x2F;project-2&#x2F;&hashtags=neural network,experimentation,pruning,quantization,distillation"></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -4,4 +4,4 @@
 A repository for hosting my personal website. Built with Zola. 
 
 # Website link
-[https://celisa.github.io](http://elisachen.xyz/)http://elisachen.xyz/
+http://elisachen.xyz
